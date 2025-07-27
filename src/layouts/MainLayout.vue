@@ -5,7 +5,7 @@
       <q-toolbar class="q-px-none">
         <!-- Logo on left -->
         <div class="logo-container">
-          <img src="../assets/quasar-logo-vertical.svg" alt="Company Logo" class="logo" />
+          <img src="../assets/logo.png" alt="Company Logo" class="logo" />
           <span class="company-name">TalentConnect</span>
         </div>
 
