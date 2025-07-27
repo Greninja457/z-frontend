@@ -22,6 +22,7 @@
 
           <!-- Job Button -->
           <q-btn
+            id="register-btn"
             label="Register"
             color="white"
             text-color="dark"
