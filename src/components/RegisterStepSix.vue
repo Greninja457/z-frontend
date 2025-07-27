@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, defineProps } from 'vue'
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const props = defineProps({
   StepSixUpdate: {
@@ -34,7 +35,7 @@ async function getAllSkills() {
   try {
     loading.value = true
     error.value = null
-    const res = await fetch('http://localhost:3000/skills/all', {
+    const res = await fetch(`${baseUrl}/skills/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
