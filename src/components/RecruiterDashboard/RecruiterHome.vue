@@ -1,8 +1,8 @@
 <template>
   <RecruiterStats />
-  <RecruiterNotifications />
+  <RecruiterSkillStats />
 </template>
 <script setup>
 import RecruiterStats from './RecruiterStats.vue'
-import RecruiterNotifications from './Features/RecruiterNotifications.vue'
+import RecruiterSkillStats from './Features/RecruiterSkillStats.vue'
 </script>

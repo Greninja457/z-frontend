@@ -89,7 +89,7 @@
                   <option value="Full-time">Full-time</option>
                   <option value="Co-founder">Co-founder</option>
                   <option value="Contract">Contract</option>
-                  <option value="internship">Internship</option>
+                  <option value="Internship">Internship</option>
                 </select>
               </div>
 
@@ -97,8 +97,8 @@
                 <label class="form-label">Work Mode</label>
                 <select v-model="editedJob.mode_of_work" class="form-select" :disabled="!isEditing">
                   <option value="">Select work mode</option>
-                  <option value="Online">Remote</option>
-                  <option value="Offline">On-site</option>
+                  <option value="Online">Online</option>
+                  <option value="Offline">Offline</option>
                   <option value="Hybrid">Hybrid</option>
                 </select>
               </div>
@@ -107,14 +107,25 @@
                 <label class="form-label">Experience Required</label>
                 <div class="input-with-suffix">
                   <input
-                    v-model="editedJob.exp_required"
+                    v-model="editedJob.experience_min"
                     type="number"
                     class="form-input"
                     :disabled="!isEditing"
                     placeholder="0"
                     min="0"
                   />
-                  <span class="input-suffix">years</span>
+                  <span class="input-suffix">years (min)</span>
+                </div>
+                <div class="input-with-suffix">
+                  <input
+                    v-model="editedJob.experience_max"
+                    type="number"
+                    class="form-input"
+                    :disabled="!isEditing"
+                    placeholder="0"
+                    min="0"
+                  />
+                  <span class="input-suffix">years (max)</span>
                 </div>
               </div>
             </div>
@@ -129,11 +140,22 @@
                 <div class="input-with-prefix">
                   <span class="input-prefix">₹</span>
                   <input
-                    v-model="editedJob.salary"
+                    v-model="editedJob.salary_min"
                     type="number"
                     class="form-input"
                     :disabled="!isEditing"
-                    placeholder="0"
+                    placeholder="Min salary"
+                    min="0"
+                  />
+                </div>
+                <div class="input-with-prefix">
+                  <span class="input-prefix">₹</span>
+                  <input
+                    v-model="editedJob.salary_max"
+                    type="number"
+                    class="form-input"
+                    :disabled="!isEditing"
+                    placeholder="Max salary"
                     min="0"
                   />
                 </div>
@@ -143,11 +165,23 @@
                 <label class="form-label">Equity</label>
                 <div class="input-with-suffix">
                   <input
-                    v-model="editedJob.equity"
+                    v-model="editedJob.equity_min"
                     type="number"
                     class="form-input"
                     :disabled="!isEditing"
-                    placeholder="0"
+                    placeholder="Min equity"
+                    min="0"
+                    step="0.1"
+                  />
+                  <span class="input-suffix">%</span>
+                </div>
+                <div class="input-with-suffix">
+                  <input
+                    v-model="editedJob.equity_max"
+                    type="number"
+                    class="form-input"
+                    :disabled="!isEditing"
+                    placeholder="Max equity"
                     min="0"
                     step="0.1"
                   />
@@ -163,6 +197,42 @@
                   class="form-input"
                   disabled
                 />
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Fields -->
+          <div class="form-section">
+            <h3 class="section-title">Additional Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Opening</label>
+                <input
+                  v-model="editedJob.opening"
+                  type="number"
+                  class="form-input"
+                  :disabled="!isEditing"
+                  placeholder="Number of openings"
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Qualifications</label>
+                <select
+                  v-model="editedJob.qualification"
+                  class="form-select"
+                  :disabled="!isEditing"
+                >
+                  <option value="">Select qualification</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Phd">PhD</option>
+                  <option value="10th">10th</option>
+                  <option value="12th">12th</option>
+                </select>
               </div>
             </div>
           </div>
@@ -191,8 +261,6 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
 import { useQuasar } from 'quasar'
-// import { useUserStore } from "src/stores/user-store";
-// import { useRouter } from "vue-router";
 import { useJobsStore } from 'src/stores/appStore'
 
 const props = defineProps({
@@ -289,7 +357,7 @@ const notify = (msg, color = 'primary') => {
   $q.notify({
     message: msg,
     color,
-    position: 'top-right',
+    position: 'bottom',
     timeout: 3000,
   })
 }
@@ -462,6 +530,7 @@ const notify = (msg, color = 'primary') => {
 .form-input,
 .form-textarea,
 .form-select {
+  margin-top: 5px;
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #e5e5e5;

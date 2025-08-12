@@ -9,7 +9,6 @@
         <div class="section-title">Basic Details</div>
         <div class="form-entry">
           <q-input
-            class="styled-input"
             v-model="form.title"
             label="Job Title"
             filled
@@ -34,34 +33,131 @@
             filled
             :rules="[isRequired]"
           />
-          <q-input
-            v-model.number="form.exp_required"
-            label="Experience Required (Years)"
-            type="number"
-            filled
-            :rules="[isRequired, isPositiveNumber]"
-            min="0"
-            max="50"
-          />
 
-          <q-input
-            v-model="form.salary"
-            label="Salary"
-            type="number"
-            filled
-            :rules="[isRequired, isSalaryValid]"
-            class="q-mb-md"
-          />
+          <!-- Experience Range -->
+          <div class="experience-range">
+            <q-input
+              v-model.number="form.experience_min"
+              label="Min Experience (Years)"
+              type="number"
+              filled
+              :rules="[isRequired, isPositiveNumber]"
+              min="0"
+              max="50"
+              class="experience-input"
+            />
+            <q-input
+              v-model.number="form.experience_max"
+              label="Max Experience (Years)"
+              type="number"
+              filled
+              :rules="[isPositiveNumber, validateExperienceRange]"
+              min="0"
+              max="50"
+              class="experience-input"
+            />
+          </div>
 
-          <!-- ✅ Equity (Optional) -->
+          <!-- Salary Range -->
+          <div class="salary-range">
+            <q-input
+              v-model.number="form.salary_min"
+              label="Min Salary (₹)"
+              type="number"
+              filled
+              :rules="[isRequired, isSalaryValid]"
+              min="1000"
+              placeholder="e.g. 400000"
+              class="salary-input"
+            />
+            <q-input
+              v-model.number="form.salary_max"
+              label="Max Salary (₹)"
+              type="number"
+              filled
+              :rules="[isSalaryValid, validateSalaryRange]"
+              min="1000"
+              placeholder="e.g. 600000"
+              class="salary-input"
+            />
+          </div>
+
+          <!-- Equity Range (Optional) -->
+          <div class="equity-range">
+            <q-input
+              v-model.number="form.equity_min"
+              label="Min Equity % (Optional)"
+              type="number"
+              filled
+              min="0"
+              max="100"
+              step="0.1"
+              class="equity-input"
+            />
+            <q-input
+              v-model.number="form.equity_max"
+              label="Max Equity % (Optional)"
+              type="number"
+              filled
+              min="0"
+              max="100"
+              step="0.1"
+              :rules="[validateEquityRange]"
+              class="equity-input"
+            />
+          </div>
+
+          <!-- Number of Openings -->
           <q-input
-            v-model.number="form.equity"
-            label="Equity % (Optional)"
+            v-model.number="form.opening"
+            label="Number of Openings"
             type="number"
             filled
-            min="0"
+            :rules="[isRequired, isPositiveOpenings]"
+            min="1"
             max="100"
-            step="0.1"
+          />
+        </div>
+
+        <div class="section-title">Additional Details</div>
+        <div class="form-entry">
+          <!-- Qualification ID (Simple integer input for now) -->
+          <q-select
+            v-model="form.qualification"
+            :options="qualificationOptions"
+            label="Qualification"
+            filled
+            :rules="[isRequired]"
+          />
+
+          <!-- Market ID (Simple integer input for now) -->
+
+          <q-select
+            v-model="form.job_markets"
+            :options="MarketOptions"
+            label="Select Markets"
+            filled
+            use-chips
+            multiple
+            :rules="[isRequired]"
+            emit-value
+            map-options
+            :loading="skillsLoading"
+            :disable="skillsLoading"
+          />
+
+          <q-select
+            v-model="form.job_roles"
+            :options="RoleOptions"
+            label="Select job roles"
+            filled
+            use-chips
+            multiple
+            :rules="[isRequired]"
+            emit-value
+            map-options
+            :loading="skillsLoading"
+            :disable="skillsLoading"
           />
         </div>
 
@@ -117,58 +213,16 @@
           />
         </div>
 
-        <!-- Links Section (Optional) -->
-
-        <div class="section-title">Additional Links (Optional)</div>
-
-        <div class="form-entry">
-          <div v-for="(link, index) in form.links" :key="index" class="link-row">
-            <q-input
-              v-model="link.label"
-              label="Link Label"
-              filled
-              class="link-label"
-              placeholder="e.g. Company Website"
-            />
-
-            <q-input
-              v-model="link.url"
-              label="URL"
-              filled
-              class="link-url"
-              placeholder="https://example.com"
-              :rules="[isValidUrl]"
-            />
-
-            <q-btn
-              flat
-              round
-              color="negative"
-              icon="delete"
-              @click="removeLink(index)"
-              class="link-remove"
-            />
-          </div>
-
-          <q-btn
-            flat
-            color="primary"
-            icon="add"
-            label="Add Link"
-            @click="addLink"
-            class="q-mt-sm"
-          />
-        </div>
-
         <q-card-actions align="right">
           <q-btn type="submit" label="Preview Job" color="primary" />
         </q-card-actions>
       </q-form>
 
+      <!-- Preview Mode -->
       <div v-else class="form-wrapper">
         <q-separator />
         <q-card-section>
-          <JobCard :job="previewJob" />
+          <PreviewJob :job="previewJob" />
         </q-card-section>
         <q-card-actions align="between" class="q-pa-md">
           <q-btn flat label="Back to Edit" color="grey-6" @click="isPreviewing = false" />
@@ -183,8 +237,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useJobsStore } from 'src/stores/jobStore'
-import JobCard from 'src/components/Jobs/JobCard.vue'
 import { useUserStore } from 'src/stores/user-store'
+import PreviewJob from './PreviewJob.vue'
 
 const $q = useQuasar()
 const jobsStore = useJobsStore()
@@ -224,25 +278,47 @@ const form = ref({
   companyName: '',
   job_type: '',
   mode_of_work: '',
-  exp_required: 0,
-  salary: 0,
-  equity: 0,
+  experience_min: 0,
+  experience_max: 0,
+  salary_min: 0,
+  salary_max: 0,
+  equity_min: 0,
+  equity_max: 0,
+  opening: 1,
+  qualification: null,
+  job_markets: [],
+  job_roles: [],
   lid: null,
   cid: null,
   skillids: [],
   bigDescription: '',
   smallDescription: '',
-  links: [],
 })
 
-const previewJob = computed(() => ({
-  ...form.value,
-  posted: new Date().toISOString().split('T')[0],
-}))
+const previewJob = computed(() => {
+  const selectedLocation = locations.value.find((location) => location.id === form.value.lid)
 
-const jobTypes = ['Full-time', 'Co-founder', 'Contract', 'internship']
+  let selectedSkills = form.value.skillids.map((skillId) => {
+    const skill = skills.value.find((skill) => skill.id === skillId)
+    return skill ? skill.name : 'Unknown Skill'
+  })
+
+  const locationLabel = selectedLocation ? selectedLocation.name : 'Not selected'
+
+  return {
+    ...form.value,
+    company: useUserStore().company,
+    location: locationLabel,
+    skills: selectedSkills,
+    posted: new Date().toISOString().split('T')[0],
+  }
+})
+
+const jobTypes = ['Full-time', 'Co-founder', 'Contract', 'Internship']
 const modeOptions = ['Online', 'Offline', 'Hybrid']
-
+const qualificationOptions = ['Postgraduate', 'Undergraduate', 'Phd', '10th', '12th']
+const MarketOptions = ref([])
+const RoleOptions = ref([])
 // API Functions
 async function getAllSkills() {
   try {
@@ -320,6 +396,60 @@ async function getAllLocations() {
   }
 }
 
+async function getAllMarkets() {
+  try {
+    const res = await fetch(`${baseUrl}/markets/all`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = await res.json()
+    if (data.success && data.markets) {
+      // Make sure MarketOptions is reactive and updated
+      MarketOptions.value = data.markets.map((market) => ({
+        label: market[1],
+        value: market[0],
+      }))
+      console.log('Markets fetched successfully')
+    }
+  } catch (error) {
+    console.error('Error fetching markets:', error)
+    $q.notify({
+      type: 'negative',
+      message: `Failed to load markets: ${error.message}`,
+    })
+  }
+}
+
+async function getAllRoles() {
+  try {
+    const res = await fetch(`${baseUrl}/roles/all`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = await res.json()
+    if (data.success && data.roles) {
+      // Make sure MarketOptions is reactive and updated
+      RoleOptions.value = data.roles.map((role) => ({
+        label: role[1],
+        value: role[0],
+      }))
+      console.log('Roles fetched successfully')
+    }
+  } catch (error) {
+    console.error('Error fetching roles:', error)
+    $q.notify({
+      type: 'negative',
+      message: `Failed to load roles: ${error.message}`,
+    })
+  }
+}
+
 // Validation Rules
 const isRequired = (val) => !!val || 'This field is required'
 const minLength = (n) => (val) => !val || val.length >= n || `Minimum ${n} characters`
@@ -329,34 +459,43 @@ const isPositiveNumber = (val) => {
   return (val >= 0 && val <= 50) || 'Experience should be between 0-50 years'
 }
 
+const isPositiveOpenings = (val) => {
+  return (val >= 1 && val <= 100) || 'Openings should be between 1-100'
+}
+
 const isSalaryValid = (val) => {
   if (!val || val < 1000) return 'Salary must be at least ₹1,000'
   if (val > 99990000) return 'Salary seems too high'
   return true
 }
 
-const isValidUrl = (val) => {
-  if (!val) return true // Optional field
-  try {
-    new URL(val)
-    return true
-  } catch {
-    return 'Please enter a valid URL'
+const validateExperienceRange = (val) => {
+  if (!val) return true // Optional max experience
+  if (form.value.experience_min && val < form.value.experience_min) {
+    return 'Max experience should be greater than or equal to min experience'
   }
+  return true
 }
 
-// Link management
-const addLink = () => {
-  form.value.links.push({ label: '', url: '' })
+const validateSalaryRange = (val) => {
+  if (!val) return true // Optional max salary
+  if (form.value.salary_min && val < form.value.salary_min) {
+    return 'Max salary should be greater than or equal to min salary'
+  }
+  return true
 }
 
-const removeLink = (index) => {
-  form.value.links.splice(index, 1)
+const validateEquityRange = (val) => {
+  if (!val) return true // Optional max equity
+  if (form.value.equity_min && val < form.value.equity_min) {
+    return 'Max equity should be greater than or equal to min equity'
+  }
+  return true
 }
 
 onMounted(async () => {
   // Load skills and locations from backend
-  await Promise.all([getAllSkills(), getAllLocations()])
+  await Promise.all([getAllSkills(), getAllLocations(), getAllMarkets(), getAllRoles()])
 
   // Set company data if available
   if (useUserStore().company) {
@@ -374,7 +513,6 @@ async function handlePreview() {
     })
     return
   }
-  console.log(previewJob)
 
   isPreviewing.value = true
 }
@@ -392,14 +530,21 @@ async function submitJob() {
       smallDescription: form.value.smallDescription,
       job_type: form.value.job_type,
       mode_of_work: form.value.mode_of_work,
-      exp_required: form.value.exp_required,
-      salary: form.value.salary,
+      experience_min: form.value.experience_min,
+      experience_max: form.value.experience_max,
+      salary_min: form.value.salary_min,
+      salary_max: form.value.salary_max,
+      equity_min: form.value.equity_min || 0,
+      equity_max: form.value.equity_max || 0,
+      opening: form.value.opening,
+      qualification: form.value.qualification,
+      job_markets: form.value.job_markets,
+      job_roles: form.value.job_roles,
       skillids: form.value.skillids,
-      equity: form.value.equity || 0,
       lid: form.value.lid,
-      links: form.value.links.filter((link) => link.label && link.url),
     }
 
+    console.log(jobData)
     const result = await jobsStore.postJob(jobData)
 
     console.log('Job submission result:', result)
@@ -422,8 +567,7 @@ async function submitJob() {
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: 'An error occurred while posting the job',
-      error: error,
+      message: error.message,
     })
   } finally {
     isSubmitting.value = false
@@ -436,15 +580,21 @@ function resetForm() {
     companyName: useUserStore().company?.name || '',
     job_type: '',
     mode_of_work: '',
-    exp_required: 0,
-    salary: 0,
-    equity: 0,
+    experience_min: 0,
+    experience_max: 0,
+    salary_min: 0,
+    salary_max: 0,
+    equity_min: 0,
+    equity_max: 0,
+    opening: 1,
+    qualification: null,
+    job_markets: [],
+    job_roles: [],
     lid: null,
     cid: useUserStore().company?.cid || null,
     skillids: [],
     bigDescription: '',
     smallDescription: '',
-    links: [],
   }
 
   formRef.value?.resetValidation()
@@ -479,6 +629,14 @@ function resetForm() {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.form-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
 /* Unified Input & Select Styling */
@@ -560,28 +718,19 @@ function resetForm() {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-/* Link Management */
-.link-row {
+/* Range input styles */
+.experience-range,
+.salary-range,
+.equity-range {
   display: flex;
-  gap: 12px;
-  align-items: center;
+  gap: 16px;
+  align-items: flex-start;
 }
 
-.link-label {
-  flex: 0 0 30%;
-  min-width: 120px;
-}
-
-.link-url {
+.experience-input,
+.salary-input,
+.equity-input {
   flex: 1;
-}
-
-.link-remove {
-  color: #f44336 !important;
-}
-
-.link-remove:hover {
-  background-color: rgba(244, 67, 54, 0.08) !important;
 }
 
 /* Responsive */
@@ -590,13 +739,16 @@ function resetForm() {
     padding: 24px 16px;
   }
 
-  .link-row {
+  .experience-range,
+  .salary-range,
+  .equity-range {
     flex-direction: column;
     gap: 8px;
   }
 
-  .link-label,
-  .link-url {
+  .experience-input,
+  .salary-input,
+  .equity-input {
     width: 100%;
   }
 }

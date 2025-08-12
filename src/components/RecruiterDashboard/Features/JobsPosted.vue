@@ -42,8 +42,8 @@
               <div class="info-card">
                 <div class="info-icon"><q-icon name="work_history" /></div>
                 <div class="info-content">
-                  <div class="info-label">Experience</div>
-                  <div class="info-value">{{ job.exp_required }} years</div>
+                  <div class="info-label">Experience (MAX - MIN)</div>
+                  <div class="info-value">{{ job.experience_max - job.experience_min }} years</div>
                 </div>
               </div>
 
@@ -51,7 +51,7 @@
                 <div class="info-icon"><q-icon name="payments" /></div>
                 <div class="info-content">
                   <div class="info-label">Salary Level</div>
-                  <div class="info-value">Level {{ job.salary }}</div>
+                  <div class="info-value">{{ job.salary_max - job.salary_min }}</div>
                 </div>
               </div>
 
