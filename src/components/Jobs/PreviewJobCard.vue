@@ -59,7 +59,7 @@
               <q-btn
                 unelevated
                 dense
-                label="Learn +"
+                label="Learn"
                 class="btn-filled-black equal-button"
                 @click.stop="goToDetails"
               />
@@ -84,17 +84,17 @@ const props = defineProps({
 })
 
 const jobData = reactive({
-  logo: props.job?.logo || demoLogo,
-  title: props.job?.title || 'No title',
-  job_type: props.job?.job_type || 'No jtype',
-  location: props.job?.location || 'No location',
-  salary: props.job?.salary || 0,
-  posted: props.job?.posted || '1990-08-08',
+  logo: props.job.logo || demoLogo,
+  title: props.job.title || 'No title',
+  job_type: props.job.job_type || 'No jtype',
+  location: props.job.location || 'No location',
+  salary: props.job.salary || 0,
+  posted: props.job.posted || '1990-08-08',
 
-  name: props.job?.companyName || 'No name',
-  hiringStatus: props.job?.status || 'No status',
-  companyType: props.job?.type || [],
-  tags: props.job.company?.tags || [],
+  name: props.job.company.name || 'No name',
+  hiringStatus: props.job.company.status || 'No status',
+  companyType: props.job.company.type || [],
+  tags: props.job.company.tags || [],
 })
 
 const router = useRouter()

@@ -2,20 +2,7 @@
   <q-card class="modern-profile-card full-width" flat bordered>
     <!-- Header with gradient -->
     <div class="card-header q-pa-md text-white relative-position">
-      <div class="absolute-top-right q-pa-sm">
-        <q-btn
-          round
-          flat
-          icon="edit"
-          color="white"
-          size="sm"
-          :loading="isEditing"
-          @click="handleEditProfile"
-          class="edit-btn"
-        >
-          <q-tooltip class="bg-grey-8">Edit Profile</q-tooltip>
-        </q-btn>
-      </div>
+      <div class="absolute-top-right q-pa-sm"></div>
 
       <div class="profile-header">
         <div class="profile-avatar-container">
@@ -96,13 +83,9 @@
     <q-card-section class="footer-section">
       <div class="status-row">
         <div class="status-info">
-          <q-icon
-            :name="user.status === 'online' ? 'circle' : 'schedule'"
-            :color="statusColor"
-            size="10px"
-          />
+          <q-icon name="circle" :color="statusColor" size="10px" />
           <span class="status-text text-weight-medium">
-            {{ user.status === 'online' ? 'Online' : 'Last seen' }}
+            {{ user.status }}
           </span>
         </div>
       </div>
@@ -111,23 +94,22 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { reactive, computed } from 'vue'
 import { useQuasar } from 'quasar'
+import { useUserStore } from 'src/stores/user-store'
+import ApplicantPng from '../../assets/applicant.png'
+import RecruiterPng from '../../assets/recruiter.png'
 
 const $q = useQuasar()
 
 const user = reactive({
-  name: 'Alex Rivera',
-  phone: '+1 (555) 234-5678',
-  email: 'alex.rivera@company.com',
-  plan: 'premium',
-  profilePhoto:
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-  lastActive: '2 hours ago',
-  status: 'online',
+  name: useUserStore().name,
+  phone: useUserStore().phone,
+  email: useUserStore().email,
+  plan: 'Welcome',
+  profilePhoto: useUserStore().role == 'applicant' ? ApplicantPng : RecruiterPng,
+  status: useUserStore().role,
 })
-
-const isEditing = ref(false)
 
 // Responsive sizing
 const avatarSize = computed(() => {
@@ -155,22 +137,8 @@ const planIcon = computed(() => {
 })
 
 const statusColor = computed(() => {
-  return user.status === 'online' ? 'positive' : 'orange'
+  return 'positive'
 })
-
-const handleEditProfile = () => {
-  isEditing.value = true
-
-  setTimeout(() => {
-    isEditing.value = false
-    $q.notify({
-      type: 'positive',
-      message: 'Profile updated successfully',
-      position: 'top',
-      timeout: 2000,
-    })
-  }, 1500)
-}
 
 const copyToClipboard = (text, type) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -229,7 +197,6 @@ const copyToClipboard = (text, type) => {
 }
 
 .profile-avatar {
-  border: 3px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 

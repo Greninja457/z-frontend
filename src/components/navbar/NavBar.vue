@@ -15,13 +15,14 @@
           v-for="nav in navigation"
           :key="nav.name"
           flat
-          :to="nav.route"
           exact
           class="nav-btn"
-          :class="{ active: $route.path === nav.route }"
+          :class="{ active: props.current === nav.name }"
+          @click="nav.changeValue"
         >
           {{ nav.label }}
         </q-btn>
+        <q-btn flat exact class="nav-btn" @click="logOut"> Log out </q-btn>
       </div>
 
       <!-- Mobile menu button -->
@@ -60,22 +61,30 @@
 </template>
 
 <script setup>
+import { useUserStore } from 'src/stores/user-store'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
 
-const route = useRoute()
 const rightDrawerOpen = ref(false)
-route
-const navigation = [
-  { name: 'Home', label: 'Home', route: '/applicant' },
-  { name: 'Applications', label: 'Applications', route: '/applications' },
-  { name: 'Links', label: 'Links', route: '/links' },
-  { name: 'Recommended jobs', label: 'Recommended jobs', route: '/recommended' },
-  { name: 'Special feature', label: 'Special feature', route: '/special' },
-]
+const router = useRouter()
+
+const props = defineProps({
+  current: String,
+  navigation: {
+    type: Array,
+    required: true,
+  },
+})
+
+const navigation = ref(props.navigation)
 
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
+}
+
+const logOut = () => {
+  useUserStore().setEverythingToNull()
+  router.push('/login')
 }
 </script>
 
@@ -131,7 +140,7 @@ const toggleRightDrawer = () => {
 }
 
 .nav-btn.active {
-  background-color: #f3f4f6;
+  background-color: #dfdfe0;
   color: #111827;
   font-weight: 600;
 }

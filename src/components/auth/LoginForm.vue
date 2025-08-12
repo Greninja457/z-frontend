@@ -60,7 +60,7 @@ const onSubmit = async () => {
 
       // Small delay to show success message before redirect
       setTimeout(() => {
-        const role = userStore.user?.role
+        const role = userStore?.role
         if (role === 'applicant') {
           router.push('/applicant')
         } else if (role === 'recruiter') {

@@ -23,6 +23,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', name: 'recruiter', component: () => import('pages/RecruiterPage.vue') }],
   },
+  {
+    path: '/all-jobs',
+    component: () => import('layouts/RootLayout.vue'),
+    children: [{ path: '', name: 'applicant', component: () => import('pages/AllJobsPage.vue') }],
+  },
 
   // Fallback for 404
   {

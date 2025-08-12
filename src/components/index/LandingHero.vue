@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-container">
+  <div id="login-button" class="hero-container">
     <q-card class="hero-card">
       <q-card-section class="hero-content">
         <!-- Heading -->

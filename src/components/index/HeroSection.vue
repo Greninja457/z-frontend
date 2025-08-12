@@ -16,8 +16,8 @@
 
     <!-- CTA Buttons -->
     <div class="cta-buttons">
-      <button class="btn btn-primary">Get Started</button>
-      <button class="btn btn-secondary">Learn More</button>
+      <a href="#login-button" class="btn btn-primary">Get Started</a>
+      <q-btn to="/all-jobs" class="btn btn-secondary">Checkout jobs</q-btn>
     </div>
 
     <!-- Animated Floating Tags for Large Screens -->
