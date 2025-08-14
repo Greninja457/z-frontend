@@ -65,7 +65,7 @@ const props = defineProps({
 
 @media (min-width: 1024px) {
   .modern-right-card {
-    height: 80vh;
+    height: 85vh;
   }
 }
 </style>

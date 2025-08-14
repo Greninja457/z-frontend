@@ -1,7 +1,7 @@
 <template>
   <q-card class="modern-profile-card full-width" flat bordered>
     <!-- Header with gradient -->
-    <div class="card-header q-pa-md text-white relative-position">
+    <div class="card-header q-pa-sm text-white relative-position">
       <div class="absolute-top-right q-pa-sm"></div>
 
       <div class="profile-header">
@@ -29,7 +29,7 @@
 
     <!-- Contact Information -->
     <q-card-section class="contact-section">
-      <div class="section-title text-weight-medium q-mb-md">Contact Information</div>
+      <div class="section-title text-weight-medium q-mb-sm">Contact Information</div>
 
       <div class="contact-list">
         <!-- Email -->
@@ -83,7 +83,7 @@
     <q-card-section class="footer-section">
       <div class="status-row">
         <div class="status-info">
-          <q-icon name="circle" :color="statusColor" size="10px" />
+          <q-icon name="circle" :color="statusColor" size="8px" />
           <span class="status-text text-weight-medium">
             {{ user.status }}
           </span>
@@ -111,21 +111,20 @@ const user = reactive({
   status: useUserStore().role,
 })
 
-// Responsive sizing
+// Responsive sizing - reduced sizes
 const avatarSize = computed(() => {
-  if ($q.screen.xs) return '60px'
-  if ($q.screen.sm) return '70px'
-  return '80px'
+  if ($q.screen.xs) return '50px'
+  if ($q.screen.sm) return '55px'
+  return '60px'
 })
 
 const iconSize = computed(() => {
-  if ($q.screen.xs) return '18px'
-  return '20px'
+  if ($q.screen.xs) return '16px'
+  return '18px'
 })
 
 const chipSize = computed(() => {
-  if ($q.screen.xs) return 'xs'
-  return 'sm'
+  return 'xs'
 })
 
 const planColor = computed(() => {
@@ -154,16 +153,16 @@ const copyToClipboard = (text, type) => {
 
 <style scoped>
 .modern-profile-card {
-  border-radius: 16px !important;
+  border-radius: 12px !important;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
   transition: all 0.3s ease;
   min-height: fit-content;
 }
 
 .modern-profile-card:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px);
 }
 
 .card-header {
@@ -187,7 +186,7 @@ const copyToClipboard = (text, type) => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .profile-avatar-container {
@@ -197,15 +196,15 @@ const copyToClipboard = (text, type) => {
 }
 
 .profile-avatar {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .status-badge {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 14px !important;
-  height: 14px !important;
+  bottom: 1px;
+  right: 1px;
+  width: 12px !important;
+  height: 12px !important;
   border: 2px solid white;
 }
 
@@ -214,38 +213,38 @@ const copyToClipboard = (text, type) => {
 }
 
 .user-name {
-  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-size: clamp(0.9rem, 3.5vw, 1.1rem);
   line-height: 1.2;
   word-break: break-word;
 }
 
 .plan-chip {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
 }
 
 .contact-section {
-  padding: 16px;
+  padding: 12px;
 }
 
 .section-title {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #6b7280;
 }
 
 .contact-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 8px;
+  border-radius: 8px;
   transition: all 0.2s ease;
   border: 1px solid transparent;
-  gap: 12px;
+  gap: 10px;
 }
 
 .contact-item:hover {
@@ -266,13 +265,13 @@ const copyToClipboard = (text, type) => {
 }
 
 .contact-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #6b7280;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .contact-value {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #1f2937;
   word-break: break-all;
   line-height: 1.3;
@@ -298,59 +297,59 @@ const copyToClipboard = (text, type) => {
 }
 
 .footer-section {
-  padding: 8px 16px;
+  padding: 6px 12px;
 }
 
 .status-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #6b7280;
 }
 
 .status-info {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .status-text {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .last-active {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 /* Mobile specific adjustments */
 @media (max-width: 599px) {
   .profile-header {
-    gap: 8px;
+    gap: 6px;
   }
 
   .contact-section {
-    padding: 12px;
+    padding: 10px;
   }
 
   .contact-item {
-    padding: 10px;
-    gap: 10px;
+    padding: 6px;
+    gap: 8px;
   }
 
   .contact-value {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
 /* Small desktop adjustments for narrow column */
 @media (min-width: 768px) and (max-width: 1023px) {
   .contact-value {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .user-name {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
 </style>

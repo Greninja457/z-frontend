@@ -12,13 +12,6 @@ export default {
   components: {
     UserPanel,
   },
-  props: {
-    tab: {
-      type: String,
-      required: true,
-    },
-  },
-  emits: ['update:tab'],
 }
 </script>
 

@@ -6,14 +6,14 @@
     />
     <q-page-container>
       <q-page class="q-pa-md">
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-3">
+        <div class="row">
+          <div class="col-12 col-md-2">
             <div class="full-height left-card-wrapper">
               <LeftCard />
             </div>
           </div>
 
-          <div class="col-12 col-md-9">
+          <div class="col-12 col-md-10">
             <div class="full-height right-card-wrapper">
               <RightCard :component="RightComponent" />
             </div>
@@ -123,6 +123,6 @@ const recruiterNavLinks = [
   display: flex;
   justify-content: center;
   align-items: start;
-  padding: 15px;
+  padding-top: 15px;
 }
 </style>

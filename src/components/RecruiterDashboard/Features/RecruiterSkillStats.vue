@@ -367,7 +367,7 @@ defineExpose({
   border: 2px solid #e2e8f0;
   border-radius: 16px;
   transition: all 0.3s ease;
-  height: 100%;
+  height: 96%;
 }
 
 .chart-card-enhanced:hover {
@@ -377,13 +377,11 @@ defineExpose({
 
 .chart-header {
   border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
 }
 
 .skills-chart-container {
   width: 100%;
-  height: 480px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
