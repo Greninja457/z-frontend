@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-section row q-mt-sm">
+  <div class="bottom-section row q-my-md q-mx-md">
     <div class="left-side">
       <AdditionalDetails class="widget" />
     </div>
@@ -45,7 +45,6 @@ import AdditionalDetails from './AdditionalDetails.vue'
   background: white;
   padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow-y: auto;
   box-sizing: border-box;
   height: 100%;

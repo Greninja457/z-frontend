@@ -185,15 +185,10 @@ const cancelEdit = () => {
   padding: 24px;
   background-color: white;
   border-radius: 16px;
-  box-shadow:
-    0 4px 8px rgba(255, 255, 255, 0.4),
-    0 8px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 3px rgba(255, 255, 255, 0.6);
   display: flex;
   flex-direction: column;
   gap: 24px;
   box-sizing: border-box;
-  transition: box-shadow 0.3s ease;
 }
 
 .form-header {
@@ -251,7 +246,6 @@ const cancelEdit = () => {
 
 .no-border ::v-deep .q-field__control {
   border: none !important;
-  box-shadow: none !important;
   background: transparent !important;
 }
 </style>

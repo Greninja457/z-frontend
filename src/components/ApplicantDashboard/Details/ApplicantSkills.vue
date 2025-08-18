@@ -39,6 +39,8 @@
         class="skill-chip q-mr-sm q-mb-sm"
         :removable="isEditable"
         @remove="removeSkill(index)"
+        color="primary"
+        text-color="white"
       >
         {{ skill.name }}
       </q-chip>
@@ -176,9 +178,7 @@ const selectSkill = ([id, name]) => {
   width: 100%;
   padding: 24px;
   box-sizing: border-box;
-  background-color: #000000;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   color: white;
 }
 

@@ -175,16 +175,10 @@ const cancelEdit = () => {
   border-radius: 16px;
 
   /* 💡 3D Effect + white glow */
-  box-shadow:
-    0 4px 8px rgba(255, 255, 255, 0.4),
-    /* soft white outer glow */ 0 8px 16px rgba(0, 0, 0, 0.05),
-    /* subtle shadow for depth */ inset 0 1px 3px rgba(255, 255, 255, 0.6); /* slight inset highlight */
 
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-sizing: border-box;
-  transition: box-shadow 0.3s ease;
 }
 
 .form-header {
@@ -220,7 +214,6 @@ const cancelEdit = () => {
 
 .no-border ::v-deep .q-field__control {
   border: none !important;
-  box-shadow: none !important;
   background: transparent !important; /* ✅ Remove grey background */
   border-radius: 0 !important;
   padding: 0 !important;
